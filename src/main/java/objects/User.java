@@ -34,8 +34,6 @@ public class User {
     }
 
 
-
-
     public String getName() {
         return name;
     }
@@ -98,6 +96,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setPassword(String password) {

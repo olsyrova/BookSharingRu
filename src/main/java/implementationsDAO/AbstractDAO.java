@@ -14,11 +14,12 @@ import java.util.List;
  */
 public abstract class AbstractDAO<T, PK extends Serializable> implements GenericDAO<T>{
 
-    private final Connection connection;
+    protected final Connection connection;
 
     public AbstractDAO(Connection connection){
         this.connection = connection;
     }
+
 
     public abstract String getLastAddedRowID();
     public abstract String getInsertQuery();
@@ -39,7 +40,7 @@ public abstract class AbstractDAO<T, PK extends Serializable> implements Generic
         try {
             statement = connection.prepareStatement(sql);
             statement.setInt(1, primaryKey);
-            ResultSet result = statement.executeQuery(sql);
+            ResultSet result = statement.executeQuery();
             resultList = parseResultSet(result);
 
         } catch (SQLException e) {

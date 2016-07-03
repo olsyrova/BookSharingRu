@@ -1,5 +1,6 @@
 package implementationsDAO;
 
+import exceptions.PersistException;
 import interfacesDAO.BookDAO;
 import interfacesDAO.UserDAO;
 import objects.*;
@@ -17,9 +18,9 @@ import java.util.List;
  */
 public class UserDAOImpl extends AbstractDAO<User, Integer> implements UserDAO {
 
-
     public UserDAOImpl(Connection connection) {
         super(connection);
+
     }
 
     @Override
@@ -97,4 +98,36 @@ public class UserDAOImpl extends AbstractDAO<User, Integer> implements UserDAO {
         return users;
     }
 
+    @Override
+    public void banUser(User user) throws PersistException {
+        String sql = "update users set banned = true where id = ?";
+
+        PreparedStatement preparedStatement;
+        try {
+            preparedStatement = this.connection.prepareStatement(sql);
+            preparedStatement.setInt(1, user.getId());
+            int count = preparedStatement.executeUpdate();
+            if (count != 1){
+                throw new PersistException("more than one row was updated");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<Book> getBooksAddedByUser(User user) {
+        return null;
+    }
+
+    @Override
+    public List<Book> getBooksSavedByUser(User user) {
+        return null;
+    }
+
+    @Override
+    public List<Book> getBooksRequestedByUser(User user) {
+        return null;
+    }
 }
