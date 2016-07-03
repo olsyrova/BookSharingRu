@@ -1,0 +1,160 @@
+# create table roles
+
+CREATE TABLE roles
+(
+  id integer NOT NULL,
+  role character varying(30) NOT NULL,
+  CONSTRAINT role_pk PRIMARY KEY (id)
+)
+
+# create table age
+
+CREATE TABLE age
+(
+  id integer NOT NULL,
+  age_range integer NOT NULL,
+  CONSTRAINT age_pk PRIMARY KEY (id)
+)
+
+# create table users
+
+CREATE TABLE users (
+
+id int NOT NULL,
+username varchar(255) NOT NULL,
+password varchar(255) NOT NULL,
+email varchar(255) NOT NULL,
+photo_path varchar(255),
+location varchar(255) NOT NULL,
+banned boolean NOT NULL,
+role_id int NOT NULL,
+age_id int NOT NULL,
+PRIMARY KEY (id),
+CONSTRAINT user_role FOREIGN KEY (role_id) REFERENCES roles(id),
+CONSTRAINT user_age FOREIGN KEY (age_id) REFERENCES age(id)
+
+)
+
+# create table publishing_houses
+
+create table publishing_houses (
+
+id int NOT NULL,
+publishing_house varchar(255) NOT NULL,
+PRIMARY KEY(id)
+
+)
+
+
+# create table images
+
+create table images (
+
+id int NOT NULL,
+book_id int NOT NULL,
+image_path varchar(500) NOT NULL,
+PRIMARY KEY(id),
+CONSTRAINT book_image FOREIGN KEY (book_id) REFERENCES books(id)
+
+)
+
+# create table categories
+
+CREATE TABLE categories (
+   id int  NOT NULL,
+   category varchar(25)  NOT NULL,
+   PRIMARY KEY (id)
+);
+
+# create authors table
+
+CREATE TABLE authors (
+   id int  NOT NULL,
+   author_name varchar(350)  NOT NULL,
+   PRIMARY KEY (id)
+);
+
+# insert values into authors table
+INSERT INTO authors (author) VALUES ('Пелевин'), ('Стругацкие'),('Достоевский'),('Лем'),('Харуки Мураками'),('Буковски')
+
+# insert values into users table
+insert into users values (nextval('users_id_seq'), 'stephan','password','stephan@gmail.com',null,null,false,1,2);
+
+
+# create table books
+
+create table books (
+id int NOT NULL,
+title varchar(255) NOT NULL,
+year int,
+category_id int NOT NULL,
+author_id int NOT NULL,
+added_by int NOT NULL,
+added_at timestamp NOT NULL,
+publishing_house_id int,
+PRIMARY KEY(id),
+CONSTRAINT book_category FOREIGN KEY(category_id) REFERENCES categories(id),
+CONSTRAINT book_author FOREIGN KEY(author_id) REFERENCES authors(id),
+CONSTRAINT book_published_in FOREIGN KEY(publishing_house_id) REFERENCES publishing_houses(id),
+CONSTRAINT book_added_by FOREIGN KEY(added_by) REFERENCES users(id)
+
+)
+
+# create table tags
+
+create table tags (
+id int,
+tag varchar(50) NOT NULL,
+PRIMARY KEY(id)
+)
+
+# create book tag relation table
+
+create table book_tag_mapping (
+book_id int NOT NULL,
+tag_id int NOT NULL,
+PRIMARY KEY (book_id,tag_id),
+CONSTRAINT book_fk FOREIGN KEY(book_id) REFERENCES books(id),
+CONSTRAINT tag_fk FOREIGN KEY(tag_id) REFERENCES tags(id)
+)
+
+# create history logs table
+
+create table history_logs (
+user_id int,
+book_id int,
+saved_at timestamp NOT NULL,
+requested_at timestamp,
+approved_at timestamp,
+rejected_at timestamp,
+PRIMARY KEY(user_id, book_id),
+CONSTRAINT user_fk FOREIGN KEY(user_id) REFERENCES users(id),
+CONSTRAINT book_fk FOREIGN KEY(book_id) REFERENCES books(id)
+)
+
+# create table dialogues
+
+create table dialogues (
+id int,
+name varchar(200) NOT NULL,
+user_1_id int NOT NULL,
+user_2_id int NOT NULL,
+date timestamp NOT NULL,
+PRIMARY KEY(id),
+CONSTRAINT user_1_fk FOREIGN KEY(user_1_id) REFERENCES users(id),
+CONSTRAINT user_2_fk FOREIGN KEY(user_2_id) REFERENCES users(id)
+)
+
+# create message table
+
+CREATE TABLE message (
+   id int  NOT NULL,
+   message text  NOT NULL,
+   date timestamp  NOT NULL,
+   dialogue_id int  NOT NULL,
+   user_id int  NOT NULL,
+   CONSTRAINT message_pk PRIMARY KEY (id),
+   CONSTRAINT message_fk FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+
