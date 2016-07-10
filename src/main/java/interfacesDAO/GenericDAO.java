@@ -15,6 +15,9 @@ public interface GenericDAO<T> {
     // persist object to the database
     public T persistObject(T obj) throws PersistException;
 
+    // persist a group of objs to the database
+    public void persistBatch(List<T> obj) throws PersistException;
+
     // update object in the database
     public void updateObject(T obj) throws PersistException;
 

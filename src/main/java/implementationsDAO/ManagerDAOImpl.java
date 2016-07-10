@@ -32,4 +32,16 @@ public class ManagerDAOImpl implements ManagerDAO {
     public UserDAOImpl getUserDAO(Connection connection) {
         return new UserDAOImpl(connection);
     }
+
+    @Override
+    public ImageDAOImpl getImageDAO(Connection connection) {
+        return new ImageDAOImpl(connection);
+    }
+
+    @Override
+    public TagDAOImpl getTagDAO(Connection connection) {
+        return new TagDAOImpl(connection);
+    }
+
+
 }

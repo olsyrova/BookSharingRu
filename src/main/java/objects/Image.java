@@ -13,6 +13,8 @@ public class Image {
         this.imagePath = imagePath;
     }
 
+    public Image(){}
+
     public int getId() {
         return id;
     }

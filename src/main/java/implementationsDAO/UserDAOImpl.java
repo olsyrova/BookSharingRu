@@ -99,13 +99,14 @@ public class UserDAOImpl extends AbstractDAO<User, Integer> implements UserDAO {
     }
 
     @Override
-    public void banUser(User user) throws PersistException {
-        String sql = "update users set banned = true where id = ?";
+    public void banUser(User user, boolean status) throws PersistException {
+        String sql = "update users set banned = ? where id = ?";
 
         PreparedStatement preparedStatement;
         try {
             preparedStatement = this.connection.prepareStatement(sql);
-            preparedStatement.setInt(1, user.getId());
+            preparedStatement.setBoolean(1, status);
+            preparedStatement.setInt(2, user.getId());
             int count = preparedStatement.executeUpdate();
             if (count != 1){
                 throw new PersistException("more than one row was updated");
@@ -118,7 +119,9 @@ public class UserDAOImpl extends AbstractDAO<User, Integer> implements UserDAO {
 
     @Override
     public List<Book> getBooksAddedByUser(User user) {
-        return null;
+        BookDAO bookDAO = new BookDAOImpl(connection);
+        List<Book> books = bookDAO.getBooksByUser(user);
+        return books;
     }
 
     @Override

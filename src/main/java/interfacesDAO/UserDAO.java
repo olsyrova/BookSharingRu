@@ -4,6 +4,7 @@ import exceptions.PersistException;
 import objects.Book;
 import objects.User;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,7 +12,8 @@ import java.util.List;
  */
 public interface UserDAO extends GenericDAO<User> {
 
-    public void banUser(User user) throws PersistException;
+    // bans/unbans user according to the value set in status
+    public void banUser(User user, boolean status) throws PersistException;
     public List<Book> getBooksAddedByUser(User user);
     public List<Book> getBooksSavedByUser(User user);
     public List<Book> getBooksRequestedByUser(User user);

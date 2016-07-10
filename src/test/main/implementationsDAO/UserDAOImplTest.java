@@ -5,6 +5,7 @@ import interfacesDAO.ManagerDAO;
 import interfacesDAO.UserDAO;
 import junit.framework.Assert;
 import objects.Age;
+import objects.Book;
 import objects.Role;
 import objects.User;
 import org.junit.Before;
@@ -12,11 +13,11 @@ import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
-import static org.junit.Assert.*;
 
 public class UserDAOImplTest {
-    UserDAO userDao;
+    private UserDAO userDao;
 
     @Before
     public void setUp(){
@@ -46,17 +47,29 @@ public class UserDAOImplTest {
     }
 
     @Test
-    public void banUserTest(){
+    public void banUserTest() {
         try {
             // get random user
-            User user1 = userDao.getObjectByID(2);
-            userDao.banUser(user1);
+            User user1 = userDao.getObjectByID(19);
+            userDao.banUser(user1, false);
             User user2 = userDao.getObjectByID(user1.getId());
-            Assert.assertEquals(user2.isBanned(),true);
+            Assert.assertEquals(user2.isBanned(), false);
         } catch (PersistException e) {
             e.printStackTrace();
         }
     }
 
+    @Test
+    public void getAllBooksByUserTest(){
+        try {
+            User user1 = userDao.getObjectByID(1);
+            List<Book> bookList = userDao.getBooksAddedByUser(user1);
+            Assert.assertNotNull(bookList);
+            Assert.assertTrue(bookList.size() == 2);
+
+        } catch (PersistException e){
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -1,6 +1,9 @@
 package objects;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -8,16 +11,35 @@ import java.util.Set;
  */
 public class Book {
 
-    private int id;
+    private int id = -1;
     private String title;
-    private int year;
+    private String description;
+    private Integer year;
     private int authorID;
     private int categoryID;
-    private int publishingHouseID;
+    private Integer publishingHouseID;
     private Timestamp added_at;
     private int owner_id;
     private Set<Tag> tags;
-    private Set<Image> images;
+    private List<Image> images;
+
+    public Book(String title, String description, Integer year, int categoryID, int authorID, Integer publishingHouseID, int owner_id){
+        this.title = title;
+        this.description = description;
+        this.year = year;
+        this.authorID = authorID;
+        this.categoryID = categoryID;
+        this.publishingHouseID = publishingHouseID;
+        this.owner_id = owner_id;
+        Date date = new Date();
+        this.added_at = new Timestamp(date.getTime());
+
+    }
+
+    public Book(String title, int categoryID, int authorID, int owner_id){
+        this(title, null, null, categoryID, authorID, null, owner_id);
+
+    }
 
     public Book(){}
 
@@ -32,16 +54,24 @@ public class Book {
 
     }
 
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setTitle(String title) {
@@ -72,11 +102,11 @@ public class Book {
         this.added_at = added_at;
     }
 
-    public int getPublishingHouseID() {
+    public Integer getPublishingHouseID() {
         return publishingHouseID;
     }
 
-    public void setPublishingHouseID(int publishingHouseID) {
+    public void setPublishingHouseID(Integer publishingHouseID) {
         this.publishingHouseID = publishingHouseID;
     }
 
@@ -96,12 +126,24 @@ public class Book {
         this.tags = tags;
     }
 
-    public Set<Image> getImages() {
+    public List<Image> getImages() {
         return images;
     }
 
-    public void setImages(Set<Image> images) {
+    public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("book with id " + id + "\n");
+        sb.append("title " + getTitle() + "\n");
+        sb.append("year " + getYear() + "\n");
+        sb.append("author " + getAuthorID() + "\n");
+        sb.append("was added by " + getOwner_id());
+        sb.append("at " + getAdded_at() + "\n");
+        return sb.toString();
     }
 
 

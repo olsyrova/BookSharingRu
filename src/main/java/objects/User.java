@@ -33,6 +33,9 @@ public class User {
         this(username, password, email, role, age, null, null);
     }
 
+    public User(String username, String password, String email, Role role, Age age, String photoPath){
+        this(username, password, email, role, age, photoPath, null);
+    }
 
     public String getName() {
         return name;

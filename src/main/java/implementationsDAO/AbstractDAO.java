@@ -139,5 +139,44 @@ public abstract class AbstractDAO<T, PK extends Serializable> implements Generic
 
     }
 
+    public void persistBatch(List<T> objectsList) throws PersistException {
+        // if object has an id it is already persisted
+        /*if (object.getID() != null){
+            throw new PersistException("object already exists in the database");
+        }*/
+        PreparedStatement preparedStatement;
+        String sql = getInsertQuery();
+        //List<T> resultList = null;
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            for (T obj : objectsList){
+                preparedStatementForInsert(preparedStatement, obj);
+                preparedStatement.addBatch();
+            }
+
+            int[] count = preparedStatement.executeBatch();
+            for (int i = 0; i < count.length; i++){
+                if (count[i] != 1) {
+                    throw new PersistException("more than one object created");
+                }
+            }
+
+            // TO DO : get newly inserted row from the database
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        /*if ((resultList == null || resultList.size() == 0)) {
+            System.out.println("No object with this id in the database");
+        } else if (resultList.size() > 1) {
+            throw new PersistException("Received more than one record.");
+        }*/
+        //return resultList.iterator().next();
+
+    }
+
 
 }
