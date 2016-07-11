@@ -4,6 +4,7 @@ import exceptions.PersistException;
 import interfacesDAO.TagDAO;
 import objects.Tag;
 import objects.User;
+import utils.Property;
 
 import java.sql.*;
 import java.util.List;
@@ -191,6 +192,11 @@ public class TagDAOImpl implements TagDAO{
     @Override
     public void persistBatch(List<Tag> obj) throws PersistException {
 
+    }
+
+    @Override
+    public List<Tag> getObjectsByProperties(List<Property> propertyList) throws PersistException {
+        return null;
     }
 
     @Override

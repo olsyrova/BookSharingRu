@@ -10,6 +10,8 @@ import objects.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import utils.Property;
+import utils.PropertyNames;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -40,6 +42,18 @@ public class BookDaoImplTest {
     public void tearDown() throws Exception {
 
     }
+
+    @Test
+    public void getBooksByProperties() throws Exception{
+        Property property = new Property(PropertyNames.TITLE, "чапаев и пустота");
+        Property property1 = new Property(PropertyNames.AUTHOR_ID, "6");
+        List<Property> list = new ArrayList<Property>();
+        list.add(property);
+        list.add(property1);
+        List<Book> books = bookDao.getObjectsByProperties(list);
+        Assert.assertNotNull(books);
+    }
+
 
     @Test
     public void addNewBookTest() throws Exception {

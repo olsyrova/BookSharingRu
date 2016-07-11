@@ -2,6 +2,7 @@ package interfacesDAO;
 
 import exceptions.PersistException;
 import implementationsDAO.AbstractDAO;
+import utils.Property;
 
 import java.util.List;
 
@@ -17,6 +18,9 @@ public interface GenericDAO<T> {
 
     // persist a group of objs to the database
     public void persistBatch(List<T> obj) throws PersistException;
+
+    // get objects by specified properties
+    public List<T> getObjectsByProperties(List<Property> propertyList) throws PersistException;
 
     // update object in the database
     public void updateObject(T obj) throws PersistException;

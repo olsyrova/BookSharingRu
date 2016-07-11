@@ -40,23 +40,40 @@ public class UserDAOImpl extends AbstractDAO<User, Integer> implements UserDAO {
     }
 
     @Override
-    public String getUpdateQuery(User user) {
-        return null;
+    public String getUpdateQuery() {
+        return "UPDATE users SET username=?,email=?,photo_path=?,location=?,banned=?,password_hash=?,age_id=? WHERE id= ?;";
     }
 
     @Override
-    public String getDeleteQuery(User user) {
-        return null;
+    public String getDeleteQuery() {
+
+        return "DELETE FROM users WHERE id=?";
     }
 
     @Override
     public void preparedStatementForDelete(PreparedStatement statement, User user) {
-
+        try{
+            statement.setInt(1, user.getId());
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void prepareStatementForUpdate(PreparedStatement statement, User user) {
+        try {
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, user.getPhotoPath());
+            statement.setString(4, user.getLocation());
+            statement.setBoolean(5, user.isBanned());
+            statement.setString(6, user.getPassword());
+            statement.setInt(7, user.getAge().getValue());
+            statement.setInt(8, user.getId());
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -100,7 +117,7 @@ public class UserDAOImpl extends AbstractDAO<User, Integer> implements UserDAO {
 
     @Override
     public void banUser(User user, boolean status) throws PersistException {
-        String sql = "update users set banned = ? where id = ?";
+        String sql = "UPDATE users SET banned = ? WHERE id = ?";
 
         PreparedStatement preparedStatement;
         try {
@@ -119,13 +136,21 @@ public class UserDAOImpl extends AbstractDAO<User, Integer> implements UserDAO {
 
     @Override
     public List<Book> getBooksAddedByUser(User user) {
-        BookDAO bookDAO = new BookDAOImpl(connection);
-        List<Book> books = bookDAO.getBooksByUser(user);
-        return books;
+        return null;
     }
+
+    /*@Override
+    public List<Book> getBooksAddedByUser(User user) {
+        BookDAO bookDAO = new BookDAOImpl(connection);
+        //List<Book> books = bookDAO.getBooksByUser(user);
+        return books;
+    }*/
+
+
 
     @Override
     public List<Book> getBooksSavedByUser(User user) {
+
         return null;
     }
 

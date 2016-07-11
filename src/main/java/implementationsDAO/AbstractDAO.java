@@ -3,11 +3,14 @@ package implementationsDAO;
 import exceptions.PersistException;
 import interfacesDAO.GenericDAO;
 import objects.Book;
+import utils.Property;
 
 import javax.naming.event.ObjectChangeListener;
 import java.io.Serializable;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by olgasyrova on 02/07/16.
@@ -24,8 +27,8 @@ public abstract class AbstractDAO<T, PK extends Serializable> implements Generic
     public abstract String getLastAddedRowID();
     public abstract String getInsertQuery();
     public abstract String getSelectQuery();
-    public abstract String getUpdateQuery(T object);
-    public abstract String getDeleteQuery(T object);
+    public abstract String getUpdateQuery();
+    public abstract String getDeleteQuery();
     public abstract void preparedStatementForDelete(PreparedStatement statement, T obj);
     public abstract void prepareStatementForUpdate(PreparedStatement statement, T obj);
     public abstract void preparedStatementForInsert(PreparedStatement statement, T obj);
@@ -74,8 +77,39 @@ public abstract class AbstractDAO<T, PK extends Serializable> implements Generic
         return resultList;
     }
 
+    public List<T> getObjectsByProperties(List<Property> propertyList){
+        List<T> objects = new ArrayList<T>();
+        StringBuilder sql = new StringBuilder();
+        sql.append(getSelectQuery()).append(" WHERE ");
+        AtomicInteger counter = new AtomicInteger(0);
+        for (Property property : propertyList){
+            counter.getAndIncrement();
+            sql.append(property.getPropertyName());
+            sql.append(" = ");
+            sql.append("'");
+            sql.append(property.getPropertyValue());
+            sql.append("'");
+            if (counter.get() < propertyList.size()){
+                sql.append(" AND ");
+            } else {
+                sql.append(";");
+            }
+        }
+        PreparedStatement preparedStatement;
+        try {
+            preparedStatement = this.connection.prepareStatement(sql.toString());
+            ResultSet rs = preparedStatement.executeQuery();
+            objects = parseResultSet(rs);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return objects;
+    }
+
     public void updateObject(T object) throws PersistException{
-        String sql = getUpdateQuery(object);
+        String sql = getUpdateQuery();
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(sql);
@@ -90,7 +124,7 @@ public abstract class AbstractDAO<T, PK extends Serializable> implements Generic
     }
 
     public void deleteObject(T object) throws PersistException{
-        String sql = getDeleteQuery(object);
+        String sql = getDeleteQuery();
         PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(sql);

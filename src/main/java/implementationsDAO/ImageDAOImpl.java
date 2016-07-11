@@ -39,12 +39,12 @@ public class ImageDAOImpl extends AbstractDAO<Image, Integer> implements ImageDA
     }
 
     @Override
-    public String getUpdateQuery(Image object) {
+    public String getUpdateQuery() {
         return null;
     }
 
     @Override
-    public String getDeleteQuery(Image object) {
+    public String getDeleteQuery() {
         return null;
     }
 
@@ -86,7 +86,7 @@ public class ImageDAOImpl extends AbstractDAO<Image, Integer> implements ImageDA
         return images;
     }
 
-    @Override
+    /*@Override
     public List<Image> getImagesByBookID(int bookID) {
         List<Image> images = new ArrayList<Image>();
         String sql = getSelectQuery() + " WHERE book_id = ?";
@@ -100,6 +100,6 @@ public class ImageDAOImpl extends AbstractDAO<Image, Integer> implements ImageDA
             e.printStackTrace();
         }
         return images;
-    }
+    }*/
 
 }

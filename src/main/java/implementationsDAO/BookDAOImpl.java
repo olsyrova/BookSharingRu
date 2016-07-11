@@ -5,11 +5,13 @@ import interfacesDAO.BookDAO;
 import interfacesDAO.ImageDAO;
 import objects.*;
 import sun.util.calendar.BaseCalendar;
+import utils.Property;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by olgasyrova on 02/07/16.
@@ -36,12 +38,12 @@ public class BookDAOImpl extends AbstractDAO<Book, Integer> implements BookDAO{
     }
 
     @Override
-    public String getUpdateQuery(Book object) {
+    public String getUpdateQuery() {
         return "UPDATE books ";
     }
 
     @Override
-    public String getDeleteQuery(Book object) {
+    public String getDeleteQuery() {
         return "DELETE FROM books WHERE title = ?;";
     }
 
@@ -108,91 +110,18 @@ public class BookDAOImpl extends AbstractDAO<Book, Integer> implements BookDAO{
         return books;
     }
 
-
     @Override
-    public Book getBookByTitle(String title) {
+    public List<Image> getBookImages(Book book) {
         return null;
     }
 
-    @Override
-    public List<Book> getBooksByCategory(Category category) {
-        List<Book> books = new ArrayList<Book>();
-        String sql = getSelectQuery() + " WHERE category_id = ?";
-        PreparedStatement preparedStatement;
-        try {
-            preparedStatement = this.connection.prepareStatement(sql);
-            preparedStatement.setInt(1, category.getId());
-            ResultSet rs = preparedStatement.executeQuery();
-            books = parseResultSet(rs);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return books;
-    }
-
-    @Override
-    public List<Book> getBooksByAuthor(Author author) {
-        List<Book> books = new ArrayList<Book>();
-        String sql = getSelectQuery() + " WHERE author_id = ?";
-        PreparedStatement preparedStatement;
-        try {
-            preparedStatement = this.connection.prepareStatement(sql);
-            preparedStatement.setInt(1, author.getId());
-            ResultSet rs = preparedStatement.executeQuery();
-            books = parseResultSet(rs);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return books;
-    }
-
-    @Override
-    public List<Book> getBooksByUser(User user) {
-        List<Book> books = new ArrayList<Book>();
-        String sql = getSelectQuery() + " WHERE added_by = ?";
-        PreparedStatement preparedStatement;
-        try {
-            preparedStatement = this.connection.prepareStatement(sql);
-            preparedStatement.setInt(1, user.getId());
-            ResultSet rs = preparedStatement.executeQuery();
-            books = parseResultSet(rs);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return books;
-    }
-
-    @Override
+    /*@Override
     public List<Image> getBookImages(Book book) {
         ImageDAO imageDAO = new ImageDAOImpl(connection);
         List<Image> images = imageDAO.getImagesByBookID(book.getId());
         book.setImages(images);
         return images;
-    }
+    }*/
 
-    @Override
-    public List<Book> getBooksAddedAfter(Date timestamp) {
-        List<Book> books = new ArrayList<Book>();
-        String sql = getSelectQuery() + " WHERE added_at > ?";
-        PreparedStatement preparedStatement;
-        try {
-            preparedStatement = this.connection.prepareStatement(sql);
-            preparedStatement.setTimestamp(1, (Timestamp) timestamp);
-            ResultSet rs = preparedStatement.executeQuery();
-            books = parseResultSet(rs);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return books;
-
-    }
 
 }
